@@ -81,6 +81,8 @@ def transform_eu_irregular(stem):
             return replace_last_syllable(stem, last_csnt_idx, 0)
         else:
             return replace_last_syllable(stem, last_csnt_idx, 4)
+    else:
+        return stem
 
 
 def transform_irregular(stem):

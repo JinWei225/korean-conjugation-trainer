@@ -4,14 +4,14 @@ from irregular_handler import detect_irregulars, transform_irregular
 
 # Present Tense Informal Low Respect Conjugation
 def conjugate_haeche_present(stem, irregular_type=None):
-    if irregular_type is not None:
+    if irregular_type:
         stem = transform_irregular(stem)
     last_csnt_idx, last_vowel_idx, last_final_idx = decompose(stem[-1])
     if last_final_idx > 0:
         if last_vowel_idx == 0 or last_vowel_idx == 8:
-            return stem + "아"  # type: ignore
+            return stem + "아"
         else:
-            return stem + "어"  # type: ignore
+            return stem + "어"
     else:
         if irregular_type == "ㅂ(우)":
             return replace_last_syllable(stem, last_csnt_idx, 14)
@@ -22,28 +22,28 @@ def conjugate_haeche_present(stem, irregular_type=None):
                 # 하다 -> 해요 special case (0 -> 1)
                 return replace_last_syllable(stem, last_csnt_idx, 1)
             elif irregular_type == "ㅅ":
-                return stem + "아"  # type: ignore
+                return stem + "아"
             else:
                 # Absorb 아 and add 요 only
                 return stem
         elif last_vowel_idx == 8:
             if irregular_type == "ㅅ":
-                return stem + "아"  # type: ignore
+                return stem + "아"
             # Contract ㅗ and ㅏ into ㅘ (8 -> 9)
             return replace_last_syllable(stem, last_csnt_idx, 9)
         elif last_vowel_idx == 13:
             if irregular_type == "ㅅ":
-                return stem + "어"  # type: ignore
+                return stem + "어"
             # Contract ㅜ and ㅓ into ㅝ (13 -> 14)
             return replace_last_syllable(stem, last_csnt_idx, 14)
         elif last_vowel_idx == 20:
             if irregular_type == "ㅅ":
-                return stem + "어"  # type: ignore
+                return stem + "어"
             # Contract ㅣ and ㅓ into ㅕ (20 -> 6)
             return replace_last_syllable(stem, last_csnt_idx, 6)
         elif last_vowel_idx == 4 or last_vowel_idx == 6:
             if irregular_type == "ㅅ":
-                return stem + "어"  # type: ignore
+                return stem + "어"
             # Absorb 어 and add 요 only
             return stem
         else:
@@ -54,7 +54,7 @@ def conjugate_haeche_present(stem, irregular_type=None):
 # Past Tense Informal Low Respect Conjugation
 def conjugate_haeche_past(stem, irregular_type=None):
     present_form = conjugate_haeche_present(stem, irregular_type)  # 먹 -> 먹어
-    last_csnt_idx, last_vowel_idx, _ = decompose(present_form[-1])  # type: ignore
+    last_csnt_idx, last_vowel_idx, _ = decompose(present_form[-1])
     return replace_last_syllable(present_form, last_csnt_idx, last_vowel_idx, 20) + "어"
 
 
@@ -72,7 +72,7 @@ def conjugate_haeche_future(stem, irregular_type=None, contracted=False):
 # Present Tense Informal High Respect Conjugation
 def conjugate_haeyoche_present(stem, irregular_type=None):
     haeche_form = conjugate_haeche_present(stem, irregular_type)
-    return haeche_form + "요"  # type: ignore
+    return haeche_form + "요"
 
 
 # Past Tense Informal High Respect Conjugation
