@@ -1,4 +1,4 @@
-from syllable_handler import decompose, replace_last_syllable
+from syllable_handler import decompose, recompose, replace_last_syllable
 from irregular_handler import detect_irregulars, transform_irregular
 
 
@@ -39,8 +39,6 @@ def conjugate_haeche_present(stem, irregular_type=None):
         elif last_vowel_idx == 20:
             if irregular_type == "ㅅ":
                 return stem + "어"
-            if stem == "이":
-                return stem + "야"
             # Contract ㅣ and ㅓ into ㅕ (20 -> 6)
             return replace_last_syllable(stem, last_csnt_idx, 6)
         elif last_vowel_idx == 4 or last_vowel_idx == 6:
@@ -56,8 +54,6 @@ def conjugate_haeche_present(stem, irregular_type=None):
 # Past Tense Informal Low Respect Conjugation
 def conjugate_haeche_past(stem, irregular_type=None):
     present_form = conjugate_haeche_present(stem, irregular_type)  # 먹 -> 먹어
-    if stem == "이":
-        return "였어"
     last_csnt_idx, last_vowel_idx, _ = decompose(present_form[-1])
     return replace_last_syllable(present_form, last_csnt_idx, last_vowel_idx, 20) + "어"
 
@@ -75,8 +71,6 @@ def conjugate_haeche_future(stem, irregular_type=None, contracted=False):
 
 # Present Tense Informal High Respect Conjugation
 def conjugate_haeyoche_present(stem, irregular_type=None):
-    if stem == "이":
-        return "예요"
     haeche_form = conjugate_haeche_present(stem, irregular_type)
     return haeche_form + "요"
 
@@ -123,30 +117,52 @@ def get_stem(dictionary_form):
         raise ValueError
 
 
-def conjugate_yida(honorific_type, tense):
+def conjugate_ida(stem, honorific_type, tense, case="consonant", contracted=False):
+    csnt_idx, vowel_idx, _ = decompose(stem)
     if honorific_type == "haeche":
         if tense == "present":
-            pass
+            if case == "consonant":
+                return stem + "야"
+            elif case == "vowel":
+                return "야"
         elif tense == "past":
-            pass
+            if case == "consonant":
+                return stem + "었어"
+            elif case == "vowel":
+                return "였어"
         elif tense == "future":
-            pass
+            return recompose(csnt_idx, vowel_idx, 8) + (
+                " 거야" if contracted else " 것이야"
+            )
     elif honorific_type == "haeyoche":
         if tense == "present":
-            pass
+            if case == "consonant":
+                return stem + "에요"
+            elif case == "vowel":
+                return "예요"
         elif tense == "past":
-            pass
+            if case == "consonant":
+                return stem + "었어요"
+            elif case == "vowel":
+                return "였어요"
         elif tense == "future":
-            pass
+            return recompose(csnt_idx, vowel_idx, 8) + (
+                " 거예요" if contracted else " 것이에요"
+            )
     elif honorific_type == "habsyoche":
         if tense == "present":
-            pass
+            return recompose(csnt_idx, vowel_idx, 17) + "니다"
         elif tense == "past":
-            pass
+            if case == "consonant":
+                return stem + "었습니다"
+            elif case == "vowel":
+                return "였습니다"
         elif tense == "future":
-            pass
+            return recompose(csnt_idx, vowel_idx, 8) + (
+                " 겁니다" if contracted else " 것입니다"
+            )
     else:
-        return "이"
+        raise ValueError
 
 
 if __name__ == "__main__":

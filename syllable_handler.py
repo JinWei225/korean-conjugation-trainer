@@ -26,7 +26,7 @@ def replace_last_syllable(stem, consonant_index, vowel_index, final_index=0):
 
 
 if __name__ == "__main__":
-    syllable = "멀"
+    syllable = "입"
     consonant_idx, vowel_idx, final_idx = decompose(syllable)
     original_syllable = recompose(consonant_idx, vowel_idx, final_idx)
     print(
