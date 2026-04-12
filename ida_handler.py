@@ -50,178 +50,235 @@ def conjugate_ida(stem, honorific_type, tense, case="consonant", contracted=Fals
 
 
 ida_form = {
-    "이": [
+    "이야": [
         {
-            "conjugation": "이야",
+            "stem": "이",
             "honorific_type": "haeche",
             "tense": "present",
             "case": "consonant",
             "contracted": None,
-        },
+        }
+    ],
+    "야": [
         {
-            "conjugation": "야",
+            "stem": "이",
             "honorific_type": "haeche",
             "tense": "present",
             "case": "vowel",
             "contracted": None,
-        },
+        }
+    ],
+    "이었어": [
         {
-            "conjugation": "이었어",
+            "stem": "이",
             "honorific_type": "haeche",
             "tense": "past",
             "case": "consonant",
             "contracted": None,
-        },
+        }
+    ],
+    "였어": [
         {
-            "conjugation": "였어",
+            "stem": "이",
             "honorific_type": "haeche",
             "tense": "past",
             "case": "vowel",
             "contracted": None,
-        },
+        }
+    ],
+    "일 것이야": [
         {
-            "conjugation": "일 것이야",
+            "stem": "이",
             "honorific_type": "haeche",
             "tense": "future",
             "case": "consonant",
             "contracted": False,
         },
         {
-            "conjugation": "일 거야",
+            "stem": "이",
+            "honorific_type": "haeche",
+            "tense": "future",
+            "case": "vowel",
+            "contracted": False,
+        },
+    ],
+    "일 거야": [
+        {
+            "stem": "이",
             "honorific_type": "haeche",
             "tense": "future",
             "case": "consonant",
             "contracted": True,
         },
         {
-            "conjugation": "일 것이야",
-            "honorific_type": "haeche",
-            "tense": "future",
-            "case": "vowel",
-            "contracted": False,
-        },
-        {
-            "conjugation": "일 거야",
+            "stem": "이",
             "honorific_type": "haeche",
             "tense": "future",
             "case": "vowel",
             "contracted": True,
         },
+    ],
+    "이에요": [
         {
-            "conjugation": "이에요",
+            "stem": "이",
             "honorific_type": "haeyoche",
             "tense": "present",
             "case": "consonant",
             "contracted": None,
-        },
+        }
+    ],
+    "예요": [
         {
-            "conjugation": "예요",
+            "stem": "이",
             "honorific_type": "haeyoche",
             "tense": "present",
             "case": "vowel",
             "contracted": None,
-        },
+        }
+    ],
+    "이었어요": [
         {
-            "conjugation": "이었어요",
+            "stem": "이",
             "honorific_type": "haeyoche",
             "tense": "past",
             "case": "consonant",
             "contracted": None,
-        },
+        }
+    ],
+    "였어요": [
         {
-            "conjugation": "였어요",
+            "stem": "이",
             "honorific_type": "haeyoche",
             "tense": "past",
             "case": "vowel",
             "contracted": None,
-        },
+        }
+    ],
+    "일 것이에요": [
         {
-            "conjugation": "일 것이에요",
+            "stem": "이",
             "honorific_type": "haeyoche",
             "tense": "future",
             "case": "consonant",
             "contracted": False,
         },
         {
-            "conjugation": "일 거예요",
+            "stem": "이",
+            "honorific_type": "haeyoche",
+            "tense": "future",
+            "case": "vowel",
+            "contracted": False,
+        },
+    ],
+    "일 거예요": [
+        {
+            "stem": "이",
             "honorific_type": "haeyoche",
             "tense": "future",
             "case": "consonant",
             "contracted": True,
         },
         {
-            "conjugation": "일 것이에요",
-            "honorific_type": "haeyoche",
-            "tense": "future",
-            "case": "vowel",
-            "contracted": False,
-        },
-        {
-            "conjugation": "일 거예요",
+            "stem": "이",
             "honorific_type": "haeyoche",
             "tense": "future",
             "case": "vowel",
             "contracted": True,
         },
+    ],
+    "입니다": [
         {
-            "conjugation": "입니다",
+            "stem": "이",
             "honorific_type": "habsyoche",
             "tense": "present",
             "case": "consonant",
             "contracted": None,
         },
         {
-            "conjugation": "입니다",
+            "stem": "이",
             "honorific_type": "habsyoche",
             "tense": "present",
             "case": "vowel",
             "contracted": None,
         },
+    ],
+    "이었습니다": [
         {
-            "conjugation": "이었습니다",
+            "stem": "이",
             "honorific_type": "habsyoche",
             "tense": "past",
             "case": "consonant",
             "contracted": None,
-        },
+        }
+    ],
+    "였습니다": [
         {
-            "conjugation": "였습니다",
+            "stem": "이",
             "honorific_type": "habsyoche",
             "tense": "past",
             "case": "vowel",
             "contracted": None,
-        },
+        }
+    ],
+    "일 것입니다": [
         {
-            "conjugation": "일 것입니다",
+            "stem": "이",
             "honorific_type": "habsyoche",
             "tense": "future",
             "case": "consonant",
             "contracted": False,
         },
         {
-            "conjugation": "일 겁니다",
+            "stem": "이",
+            "honorific_type": "habsyoche",
+            "tense": "future",
+            "case": "vowel",
+            "contracted": False,
+        },
+    ],
+    "일 겁니다": [
+        {
+            "stem": "이",
             "honorific_type": "habsyoche",
             "tense": "future",
             "case": "consonant",
             "contracted": True,
         },
         {
-            "conjugation": "일 것입니다",
-            "honorific_type": "habsyoche",
-            "tense": "future",
-            "case": "vowel",
-            "contracted": False,
-        },
-        {
-            "conjugation": "일 겁니다",
+            "stem": "이",
             "honorific_type": "habsyoche",
             "tense": "future",
             "case": "vowel",
             "contracted": True,
         },
-    ]
+    ],
 }
-
+combinations = [
+    ("haeche", "present", None, "consonant"),
+    ("haeche", "present", None, "vowel"),
+    ("haeche", "past", None, "consonant"),
+    ("haeche", "past", None, "vowel"),
+    ("haeche", "future", False, "consonant"),
+    ("haeche", "future", False, "vowel"),
+    ("haeche", "future", True, "consonant"),
+    ("haeche", "future", True, "vowel"),
+    ("haeyoche", "present", None, "consonant"),
+    ("haeyoche", "present", None, "vowel"),
+    ("haeyoche", "past", None, "consonant"),
+    ("haeyoche", "past", None, "vowel"),
+    ("haeyoche", "future", False, "consonant"),
+    ("haeyoche", "future", False, "vowel"),
+    ("haeyoche", "future", True, "consonant"),
+    ("haeyoche", "future", True, "vowel"),
+    ("habsyoche", "present", None, "consonant"),
+    ("habsyoche", "present", None, "vowel"),
+    ("habsyoche", "past", None, "consonant"),
+    ("habsyoche", "past", None, "vowel"),
+    ("habsyoche", "future", False, "consonant"),
+    ("habsyoche", "future", False, "vowel"),
+    ("habsyoche", "future", True, "consonant"),
+    ("habsyoche", "future", True, "vowel"),
+]
 if __name__ == "__main__":
     conjugation_ida_dict = {}
     stem = "이"

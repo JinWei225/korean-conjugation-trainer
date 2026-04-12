@@ -95,9 +95,72 @@ irregular_handler.py     — irregular verb lists, detection, and transformation
 
 ---
 
-## Pending
+## Completed: ida_handler.py
 
-- Special verbs: 이다 and its unique conjugation logic
-- Reverse lookup data structure (stem → list of `(conjugated_form, rule_label)` tuples)
-- Drill interface (terminal first, then web UI over local WiFi)
+**`conjugate_ida(stem, honorific_type, tense, case="consonant", contracted=False) -> str`:**
+
+- `stem` is always `"이"`
+- `case` is `"consonant"` or `"vowel"` — reflects whether the preceding noun ends in a consonant or vowel
+- `contracted` applies to future tense only
+- Raises `ValueError` for invalid `honorific_type`
+
+**Conjugation table:**
+
+| honorific_type | tense   | case      | contracted | result      |
+| -------------- | ------- | --------- | ---------- | ----------- |
+| 해체           | present | consonant | —          | 이야        |
+| 해체           | present | vowel     | —          | 야          |
+| 해체           | past    | consonant | —          | 이었어      |
+| 해체           | past    | vowel     | —          | 였어        |
+| 해체           | future  | either    | False      | 일 것이야   |
+| 해체           | future  | either    | True       | 일 거야     |
+| 해요체         | present | consonant | —          | 이에요      |
+| 해요체         | present | vowel     | —          | 예요        |
+| 해요체         | past    | consonant | —          | 이었어요    |
+| 해요체         | past    | vowel     | —          | 였어요      |
+| 해요체         | future  | either    | False      | 일 것이에요 |
+| 해요체         | future  | either    | True       | 일 거예요   |
+| 합쇼체         | present | either    | —          | 입니다      |
+| 합쇼체         | past    | consonant | —          | 이었습니다  |
+| 합쇼체         | past    | vowel     | —          | 였습니다    |
+| 합쇼체         | future  | either    | False      | 일 것입니다 |
+| 합쇼체         | future  | either    | True       | 일 겁니다   |
+
+**`ida_forms` dictionary:**
+
+- Key: `"이"`
+- Value: list of dicts, each with keys `conjugation`, `honorific_type`, `tense`, `case`, `contracted`
+- Stored separately from the main reverse lookup dictionary; drill interface will query both during lookup
+- Future tense entries are duplicated for consonant/vowel cases (identical results — can be simplified later)
+
+**Key design decisions:**
+
+- 이다 lives in its own file (`ida_handler.py`) since it does not share the stem/conjugation pipeline of regular and irregular verbs
+- Drill shows only the ending (e.g. `이에요`, `야`) — caller is responsible for attaching to noun if needed for display
+- `case` field retained on future tense entries for structural consistency, though the conjugated form is identical regardless of case
+
+---
+
+## Next: Reverse Lookup & Drill Interface
+
+**Reverse lookup approach:**
+
+1. User inputs a word in dictionary form (e.g. `춥다`)
+2. System calls `get_stem`, detects irregular type, then generates all conjugated forms using conjugation functions
+3. Each form is stored in a lookup dictionary: `conjugated_form → list of (dictionary_form, rule_label)` tuples
+4. `ida_forms` is queried separately during lookup and merged at drill time
+
+**Drill interface (terminal prototype):**
+
+- Display a conjugated form to the user
+- User inputs the dictionary form and identifies the grammar rules applied (honorific type, tense, case if 이다)
+- System checks answer against lookup dictionary
+- Terminal first, then Flask/FastAPI web UI over local WiFi
+
+**Pending:**
+
+- Reverse lookup data structure and population logic
+- Drill algorithm (word selection, answer checking, scoring)
+- Terminal UI
 - Anki deck import
+- Flask/FastAPI web app
