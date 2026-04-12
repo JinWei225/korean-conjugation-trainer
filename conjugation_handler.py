@@ -117,54 +117,6 @@ def get_stem(dictionary_form):
         raise ValueError
 
 
-def conjugate_ida(stem, honorific_type, tense, case="consonant", contracted=False):
-    csnt_idx, vowel_idx, _ = decompose(stem)
-    if honorific_type == "haeche":
-        if tense == "present":
-            if case == "consonant":
-                return stem + "야"
-            elif case == "vowel":
-                return "야"
-        elif tense == "past":
-            if case == "consonant":
-                return stem + "었어"
-            elif case == "vowel":
-                return "였어"
-        elif tense == "future":
-            return recompose(csnt_idx, vowel_idx, 8) + (
-                " 거야" if contracted else " 것이야"
-            )
-    elif honorific_type == "haeyoche":
-        if tense == "present":
-            if case == "consonant":
-                return stem + "에요"
-            elif case == "vowel":
-                return "예요"
-        elif tense == "past":
-            if case == "consonant":
-                return stem + "었어요"
-            elif case == "vowel":
-                return "였어요"
-        elif tense == "future":
-            return recompose(csnt_idx, vowel_idx, 8) + (
-                " 거예요" if contracted else " 것이에요"
-            )
-    elif honorific_type == "habsyoche":
-        if tense == "present":
-            return recompose(csnt_idx, vowel_idx, 17) + "니다"
-        elif tense == "past":
-            if case == "consonant":
-                return stem + "었습니다"
-            elif case == "vowel":
-                return "였습니다"
-        elif tense == "future":
-            return recompose(csnt_idx, vowel_idx, 8) + (
-                " 겁니다" if contracted else " 것입니다"
-            )
-    else:
-        raise ValueError
-
-
 if __name__ == "__main__":
     test_stem = [
         # "돕",
@@ -225,12 +177,3 @@ if __name__ == "__main__":
             )
         except ValueError:
             print("Error: There is a non-Hangul character! Please input again!")
-
-
-# word_indices_list = decompose_word(word)
-# for word_indices in word_indices_list:
-#     consonant_idx, vowel_idx, final_idx = word_indices
-#     original_syllable = recompose(consonant_idx, vowel_idx, final_idx)
-#     print(
-#         f"Consonant index: {consonant_idx}\nVowel index: {vowel_idx}\nFinal index: {final_idx}\nOriginal syllable: {original_syllable}\n"
-#     )
