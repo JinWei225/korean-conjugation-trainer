@@ -1,6 +1,7 @@
 from syllable_handler import decompose, replace_last_syllable
 from irregular_handler import detect_irregulars, transform_irregular
 from ida_handler import ida_form
+import pickle
 
 
 # Present Tense Informal Low Respect Conjugation
@@ -154,14 +155,14 @@ conjugation_functions = [
 
 if __name__ == "__main__":
     test_stem = [
-        # "돕",
-        # "춥",
-        # "듣",
-        # "짓",
-        # "잠그",
-        # "다르",
-        # "이",
-        # "비",
+        "돕",
+        "춥",
+        "듣",
+        "짓",
+        "잠그",
+        "다르",
+        "이",
+        "비",
         "길",
     ]
     conjugation_form = {}
@@ -199,7 +200,8 @@ if __name__ == "__main__":
     for conjugation, entries in ida_form.items():
         for entry in entries:
             conjugation_form.setdefault(conjugation, []).append(entry)
-    print(conjugation_form)
+    with open("conjugation_form.pkl", "wb") as file:
+        pickle.dump(conjugation_form, file)
 
 
 # print(f"Stem: {stem}")
