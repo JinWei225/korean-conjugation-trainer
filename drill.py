@@ -20,87 +20,100 @@ if __name__ == "__main__":
     # Step 1
     with open("conjugation_form.pkl", "rb") as file:
         conjugation_form = pickle.load(file)
-    # Step 2
-    random_form = random.choice(list(conjugation_form))
+    while True:
+        # Step 2
+        random_form = random.choice(list(conjugation_form))
 
-    # Steo 3
-    form_datas = conjugation_form.get(random_form)
-    form_data_chosen = random.choice(form_datas)
-    conjugation_form[random_form].remove(form_data_chosen)
+        # Steo 3
+        form_datas = conjugation_form.get(random_form)
+        form_data_chosen = random.choice(form_datas)
+        conjugation_form[random_form].remove(form_data_chosen)
 
-    # Step 4
-    if conjugation_form.get(random_form) == []:
-        conjugation_form.pop(random_form)
+        # Step 4
+        if conjugation_form.get(random_form) == []:
+            conjugation_form.pop(random_form)
 
-    # Step 5
-    print(f"Conjugated form: {random_form}\n")
-    print(f"Metadata: {form_data_chosen}")
-    stem_input = input("Stem: ")
-    while not is_hangul(stem_input):
-        print("Please enter hangul character. Try again!\n")
+        # Step 5
+        print(f"Conjugated form: {random_form}\n")
+        print(f"Metadata: {form_data_chosen}")
         stem_input = input("Stem: ")
-    honorific_input = input("Honorific Type (Haeche/Haeyoche/Habsyoche): ")
-    while honorific_input.lower() not in ["haeche", "haeyoche", "habsyoche"]:
-        print("Please choose from Haeche/Haeyoche/Habsyoche. Try again!\n")
+        while not is_hangul(stem_input):
+            print("Please enter hangul character. Try again!\n")
+            stem_input = input("Stem: ")
         honorific_input = input("Honorific Type (Haeche/Haeyoche/Habsyoche): ")
-    tense_input = input("Tense (Present/Past/Future): ")
-    while tense_input.lower() not in ["present", "past", "future"]:
-        print("Please choose from Present/Past/Future. Try again!\n")
+        while honorific_input.lower() not in ["haeche", "haeyoche", "habsyoche"]:
+            print("Please choose from Haeche/Haeyoche/Habsyoche. Try again!\n")
+            honorific_input = input("Honorific Type (Haeche/Haeyoche/Habsyoche): ")
         tense_input = input("Tense (Present/Past/Future): ")
-    contracted_input = input("Contracted (Yes/No): ")
-    while contracted_input.lower() not in ["yes", "no"]:
-        print("Please choose from Yes/No. Try again!\n")
+        while tense_input.lower() not in ["present", "past", "future"]:
+            print("Please choose from Present/Past/Future. Try again!\n")
+            tense_input = input("Tense (Present/Past/Future): ")
         contracted_input = input("Contracted (Yes/No): ")
-    contracted_bool = True if contracted_input == "yes" else False
-    irregular_input = input(
-        "Irregular Type [ㅅ, ㄷ, ㅂ(우), ㅂ(오), ㅡ, 르, ㄹ, None]: "
-    )
-    while irregular_input not in [
-        "ㅅ",
-        "ㄷ",
-        "ㅂ(우)",
-        "ㅂ(오)",
-        "ㅡ",
-        "르",
-        "ㄹ",
-        "None",
-    ]:
-        print(
-            "Please choose from [ㅅ, ㄷ, ㅂ(우), ㅂ(오), ㅡ, 르, ㄹ, None]. Try again!\n"
-        )
+        while contracted_input.lower() not in ["yes", "no", "none"]:
+            print("Please choose from Yes/No. Try again!\n")
+            contracted_input = input("Contracted (Yes/No/None): ")
+        if contracted_input == "Yes":
+            contracted_bool = True
+        elif contracted_input == "No":
+            contracted_bool = False
+        else:
+            contracted_bool = None
         irregular_input = input(
             "Irregular Type [ㅅ, ㄷ, ㅂ(우), ㅂ(오), ㅡ, 르, ㄹ, None]: "
         )
-    print("\nResult:")
-    print(
-        "✅ The stem is correct!"
-        if stem_input == form_data_chosen.get("stem")
-        else f"❌ The stem is incorrect! The correct answer is {form_data_chosen.get("stem")}"
-    )
-    print(
-        "✅ The honorific type is correct!"
-        if honorific_input == form_data_chosen.get("honorific_type")
-        else f"❌ The honorific type is incorrect! The correct answer is {form_data_chosen.get("honorific_type")} type."
-    )
-    print(
-        "✅ The tense is correct!"
-        if tense_input == form_data_chosen.get("tense")
-        else f"❌ The tense is incorrect! The correct answer is {form_data_chosen.get("tense")} tense."
-    )
-    print(
-        "✅ You are correct!"
-        if contracted_bool == form_data_chosen.get("contracted")
-        else " ❌You are wrong!"
-    )
-    print(
-        (
-            "This is a contracted form. "
-            if form_data_chosen.get("contracted")
-            else "This is not a contracted form. "
+        while irregular_input not in [
+            "ㅅ",
+            "ㄷ",
+            "ㅂ(우)",
+            "ㅂ(오)",
+            "ㅡ",
+            "르",
+            "ㄹ",
+            "None",
+        ]:
+            print(
+                "Please choose from [ㅅ, ㄷ, ㅂ(우), ㅂ(오), ㅡ, 르, ㄹ, None]. Try again!\n"
+            )
+            irregular_input = input(
+                "Irregular Type [ㅅ, ㄷ, ㅂ(우), ㅂ(오), ㅡ, 르, ㄹ, None]: "
+            )
+        print("\nResult:")
+        print(
+            "✅ The stem is correct!"
+            if stem_input == form_data_chosen.get("stem")
+            else f"❌ The stem is incorrect! The correct answer is {form_data_chosen.get("stem")}"
         )
-    )
-    print(
-        "✅ The irregular type is correct!"
-        if irregular_input == form_data_chosen.get("irregular_type")
-        else f"❌ The irregular type is incorrect! The correct answer is {form_data_chosen.get("irregular_type")}."
-    )
+        print(
+            "✅ The honorific type is correct!"
+            if honorific_input == form_data_chosen.get("honorific_type")
+            else f"❌ The honorific type is incorrect! The correct answer is {form_data_chosen.get("honorific_type")} type."
+        )
+        print(
+            "✅ The tense is correct!"
+            if tense_input == form_data_chosen.get("tense")
+            else f"❌ The tense is incorrect! The correct answer is {form_data_chosen.get("tense")} tense."
+        )
+        print(
+            "✅ You are correct!"
+            if contracted_bool == form_data_chosen.get("contracted")
+            else " ❌You are wrong!"
+        )
+        if contracted_bool is not None:
+            print(
+                (
+                    "This is a contracted form. "
+                    if form_data_chosen.get("contracted")
+                    else "This is not a contracted form. "
+                )
+            )
+        print(
+            "✅ The irregular type is correct!"
+            if irregular_input == form_data_chosen.get("irregular_type")
+            else f"❌ The irregular type is incorrect! The correct answer is {form_data_chosen.get("irregular_type")}."
+        )
+        choice = input("Next? (Enter 'Y' to continue, 'N' to end this program): ")
+        while choice not in ["Y", "N"]:
+            print("Please choose 'Y' or 'N'.")
+            choice = input("Next? (Enter 'Y' to continue, 'N' to end this program): ")
+        if choice == "N":
+            break
