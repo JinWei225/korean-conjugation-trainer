@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
         # Step 5
         print(f"Conjugated form: {random_form}\n")
-        print(f"Metadata: {form_data_chosen}")
+        # print(f"Metadata: {form_data_chosen}")
         stem_input = input("Stem: ")
         while not is_hangul(stem_input):
             print("Please enter hangul character. Try again!\n")
@@ -48,35 +48,41 @@ if __name__ == "__main__":
         while tense_input.lower() not in ["present", "past", "future"]:
             print("Please choose from Present/Past/Future. Try again!\n")
             tense_input = input("Tense (Present/Past/Future): ")
+        if stem_input == "이":
+            case_input = input("Case (Vowel/Consonant): ")
+            while case_input.lower() not in ["vowel", "consonant"]:
+                print("Please choose from Vowel/Consonant. Try again!\n")
+                case_input = input("Case (Vowel/Consonant): ")
         contracted_input = input("Contracted (Yes/No): ")
         while contracted_input.lower() not in ["yes", "no", "none"]:
             print("Please choose from Yes/No. Try again!\n")
             contracted_input = input("Contracted (Yes/No/None): ")
-        if contracted_input == "Yes":
+        if contracted_input.lower() == "yes":
             contracted_bool = True
-        elif contracted_input == "No":
+        elif contracted_input.lower() == "no":
             contracted_bool = False
         else:
             contracted_bool = None
-        irregular_input = input(
-            "Irregular Type [ㅅ, ㄷ, ㅂ(우), ㅂ(오), ㅡ, 르, ㄹ, None]: "
-        )
-        while irregular_input not in [
-            "ㅅ",
-            "ㄷ",
-            "ㅂ(우)",
-            "ㅂ(오)",
-            "ㅡ",
-            "르",
-            "ㄹ",
-            "None",
-        ]:
-            print(
-                "Please choose from [ㅅ, ㄷ, ㅂ(우), ㅂ(오), ㅡ, 르, ㄹ, None]. Try again!\n"
-            )
+        if stem_input != "이":
             irregular_input = input(
                 "Irregular Type [ㅅ, ㄷ, ㅂ(우), ㅂ(오), ㅡ, 르, ㄹ, None]: "
             )
+            while irregular_input not in [
+                "ㅅ",
+                "ㄷ",
+                "ㅂ(우)",
+                "ㅂ(오)",
+                "ㅡ",
+                "르",
+                "ㄹ",
+                "None",
+            ]:
+                print(
+                    "Please choose from [ㅅ, ㄷ, ㅂ(우), ㅂ(오), ㅡ, 르, ㄹ, None]. Try again!\n"
+                )
+                irregular_input = input(
+                    "Irregular Type [ㅅ, ㄷ, ㅂ(우), ㅂ(오), ㅡ, 르, ㄹ, None]: "
+                )
         print("\nResult:")
         print(
             "✅ The stem is correct!"
@@ -106,11 +112,24 @@ if __name__ == "__main__":
                     else "This is not a contracted form. "
                 )
             )
-        print(
-            "✅ The irregular type is correct!"
-            if irregular_input == form_data_chosen.get("irregular_type")
-            else f"❌ The irregular type is incorrect! The correct answer is {form_data_chosen.get("irregular_type")}."
-        )
+        if stem_input == "이" and form_data_chosen.get("stem") == "이":
+            print(
+                "✅ The case is correct!"
+                if case_input == form_data_chosen.get("case")
+                else f"❌ The case is incorrect! The correct answer is {form_data_chosen.get("case")} case."
+            )
+        elif stem_input != "이" and form_data_chosen.get("stem") != "이":
+            print(
+                "✅ The irregular type is correct!"
+                if irregular_input == form_data_chosen.get("irregular_type")
+                else f"❌ The irregular type is incorrect! The correct answer is {form_data_chosen.get("irregular_type")}."
+            )
+        elif stem_input == "이" and form_data_chosen.get("stem") != "이":
+            print(
+                f"❌ The correct irregular type is {form_data_chosen.get("irregular_type")}."
+            )
+        elif stem_input != "이" and form_data_chosen.get("stem") == "이":
+            print(f"❌ The correct case is {form_data_chosen.get("case")} case.")
         choice = input("Next? (Enter 'Y' to continue, 'N' to end this program): ")
         while choice not in ["Y", "N"]:
             print("Please choose 'Y' or 'N'.")
