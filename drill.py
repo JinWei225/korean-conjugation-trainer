@@ -20,7 +20,15 @@ if __name__ == "__main__":
     # Step 1
     with open("conjugation_form.pkl", "rb") as file:
         conjugation_form = pickle.load(file)
-    while True:
+    total_correct = 0
+    total_words_completed = 0
+    while len(conjugation_form) > 0:
+        stem_bool = False
+        honorific_bool = False
+        tense_bool = False
+        case_bool = False
+        contracted_case_bool = False
+        irregular_bool = False
         # Step 2
         random_form = random.choice(list(conjugation_form))
 
@@ -49,13 +57,13 @@ if __name__ == "__main__":
             print("Please choose from Present/Past/Future. Try again!\n")
             tense_input = input("Tense (Present/Past/Future): ")
         if stem_input == "이":
-            case_input = input("Case (Vowel/Consonant): ")
-            while case_input.lower() not in ["vowel", "consonant"]:
-                print("Please choose from Vowel/Consonant. Try again!\n")
-                case_input = input("Case (Vowel/Consonant): ")
-        contracted_input = input("Contracted (Yes/No): ")
+            case_input = input("Case (Vowel/Consonant/Both): ")
+            while case_input.lower() not in ["vowel", "consonant", "both"]:
+                print("Please choose from Vowel/Consonant/Both. Try again!\n")
+                case_input = input("Case (Vowel/Consonant/Both): ")
+        contracted_input = input("Contracted (Yes/No/None): ")
         while contracted_input.lower() not in ["yes", "no", "none"]:
-            print("Please choose from Yes/No. Try again!\n")
+            print("Please choose from Yes/No/None. Try again!\n")
             contracted_input = input("Contracted (Yes/No/None): ")
         if contracted_input.lower() == "yes":
             contracted_bool = True
@@ -83,56 +91,106 @@ if __name__ == "__main__":
                 irregular_input = input(
                     "Irregular Type [ㅅ, ㄷ, ㅂ(우), ㅂ(오), ㅡ, 르, ㄹ, None]: "
                 )
+            if irregular_input == "None" or irregular_input == "none":
+                irregular_input = None
         print("\nResult:")
-        print(
-            "✅ The stem is correct!"
-            if stem_input == form_data_chosen.get("stem")
-            else f"❌ The stem is incorrect! The correct answer is {form_data_chosen.get("stem")}"
-        )
-        print(
-            "✅ The honorific type is correct!"
-            if honorific_input == form_data_chosen.get("honorific_type")
-            else f"❌ The honorific type is incorrect! The correct answer is {form_data_chosen.get("honorific_type")} type."
-        )
-        print(
-            "✅ The tense is correct!"
-            if tense_input == form_data_chosen.get("tense")
-            else f"❌ The tense is incorrect! The correct answer is {form_data_chosen.get("tense")} tense."
-        )
-        print(
-            "✅ You are correct!"
-            if contracted_bool == form_data_chosen.get("contracted")
-            else " ❌You are wrong!"
-        )
-        if contracted_bool is not None:
+        if stem_input == form_data_chosen.get("stem"):
+            print("✅ The stem is correct!")
+            stem_bool = True
+        else:
             print(
-                (
-                    "This is a contracted form. "
-                    if form_data_chosen.get("contracted")
-                    else "This is not a contracted form. "
+                f"❌ The stem is incorrect! The correct answer is {form_data_chosen.get("stem")}"
+            )
+        if honorific_input.lower() == form_data_chosen.get("honorific_type"):
+            print("✅ The honorific type is correct!")
+            honorific_bool = True
+        else:
+            print(
+                f"❌ The honorific type is incorrect! The correct answer is {form_data_chosen.get("honorific_type")} type."
+            )
+        if tense_input.lower() == form_data_chosen.get("tense"):
+            print("✅ The tense is correct!")
+            tense_bool = True
+        else:
+            print(
+                f"❌ The tense is incorrect! The correct answer is {form_data_chosen.get("tense")} tense."
+            )
+        if contracted_bool == form_data_chosen.get("contracted"):
+            contracted_case_bool = True
+            if form_data_chosen.get("contracted") == True:
+                print("✅ This is a contracted form. ")
+            elif form_data_chosen.get("contracted") == False:
+                print("✅ This is not a contracted form. ")
+            else:
+                print(
+                    "✅ There is no contracted or non-contracted form for this word. "
                 )
+        elif contracted_bool is not None and form_data_chosen.get("contracted") is None:
+            print("❌ There is no contracted or uncontracted form for this word!")
+        elif contracted_bool is None and form_data_chosen.get("contracted") is not None:
+            print(
+                "❌ This is a contracted form. "
+                if form_data_chosen.get("contracted")
+                else "❌ This is a uncontracted form. "
             )
+        else:
+            if form_data_chosen.get("contracted"):
+                print("❌ This is a contracted form. ")
+            else:
+                print("❌ This is an uncontracted form. ")
         if stem_input == "이" and form_data_chosen.get("stem") == "이":
-            print(
-                "✅ The case is correct!"
-                if case_input == form_data_chosen.get("case")
-                else f"❌ The case is incorrect! The correct answer is {form_data_chosen.get("case")} case."
-            )
+            if case_input == form_data_chosen.get("case"):
+                print("✅ The case is correct!")
+                case_bool = True
+            else:
+                print(
+                    f"❌ The case is incorrect! The correct answer is {form_data_chosen.get("case")} case."
+                )
         elif stem_input != "이" and form_data_chosen.get("stem") != "이":
-            print(
-                "✅ The irregular type is correct!"
-                if irregular_input == form_data_chosen.get("irregular_type")
-                else f"❌ The irregular type is incorrect! The correct answer is {form_data_chosen.get("irregular_type")}."
-            )
+            if irregular_input == form_data_chosen.get("irregular_type"):
+                print("✅ The irregular type is correct!")
+                irregular_bool = True
+            else:
+                print(
+                    f"❌ The irregular type is incorrect! The correct answer is {form_data_chosen.get("irregular_type")}."
+                )
         elif stem_input == "이" and form_data_chosen.get("stem") != "이":
             print(
                 f"❌ The correct irregular type is {form_data_chosen.get("irregular_type")}."
             )
         elif stem_input != "이" and form_data_chosen.get("stem") == "이":
             print(f"❌ The correct case is {form_data_chosen.get("case")} case.")
-        choice = input("Next? (Enter 'Y' to continue, 'N' to end this program): ")
-        while choice not in ["Y", "N"]:
-            print("Please choose 'Y' or 'N'.")
-            choice = input("Next? (Enter 'Y' to continue, 'N' to end this program): ")
-        if choice == "N":
+        total_words_completed += 1
+        if (
+            stem_bool
+            and honorific_bool
+            and tense_bool
+            and case_bool
+            and contracted_case_bool
+        ) or (
+            stem_bool
+            and honorific_bool
+            and tense_bool
+            and irregular_bool
+            and contracted_case_bool
+        ):
+            total_correct += 1
+        choice = input("Next? (Enter 'Y/y' to continue, 'N/n' to end this session): ")
+        while choice.lower() not in ["y", "n"]:
+            print("Please choose 'Y/y' or 'N/n'.")
+            choice = input(
+                "Next? (Enter 'Y/y' to continue, 'N/n' to end this program): "
+            )
+        if choice.lower() == "n":
+            marks = float(total_correct) / total_words_completed * 100
+            print(
+                f"\nYou get {total_correct} out of {total_words_completed} forms correctly"
+            )
+            print(f"Your marks is {marks:.2f}")
+            print("Program End")
             break
+    if len(conjugation_form) == 0:
+        print("\nYou have finished practising all the words. Congrats!")
+        marks = float(total_correct) / total_words_completed * 100
+        print(f"You get {total_correct} out of {total_words_completed} forms correctly")
+        print(f"Your marks is {marks:.2f}")

@@ -26,6 +26,8 @@ Build a conjugation-aware Korean vocabulary trainer that drills recognition of v
 syllable_handler.py      — Hangul decomposition and recomposition
 conjugation_handler.py   — stemming and conjugation logic
 irregular_handler.py     — irregular verb lists, detection, and transformation
+ida_handler.py           — 이다 conjugation logic and lookup data
+drill.py                 — reverse lookup population and terminal drill interface
 ```
 
 ---
@@ -126,41 +128,62 @@ irregular_handler.py     — irregular verb lists, detection, and transformation
 | 합쇼체         | future  | either    | False      | 일 것입니다 |
 | 합쇼체         | future  | either    | True       | 일 겁니다   |
 
-**`ida_forms` dictionary:**
+**`ida_form` dictionary (reverse lookup format):**
 
-- Key: `"이"`
-- Value: list of dicts, each with keys `conjugation`, `honorific_type`, `tense`, `case`, `contracted`
-- Stored separately from the main reverse lookup dictionary; drill interface will query both during lookup
-- Future tense entries are duplicated for consonant/vowel cases (identical results — can be simplified later)
+- Key: conjugated form (e.g. `"이야"`, `"예요"`)
+- Value: list of dicts with keys `stem`, `honorific_type`, `tense`, `case`, `contracted`
+- Format is consistent with the main reverse lookup dictionary for uniform drill logic
+- 합쇼체 present consolidates consonant and vowel cases into one key (`"입니다"`) with two entries
+- Future tense entries duplicated for consonant/vowel (identical results — can be simplified later)
 
 **Key design decisions:**
 
 - 이다 lives in its own file (`ida_handler.py`) since it does not share the stem/conjugation pipeline of regular and irregular verbs
-- Drill shows only the ending (e.g. `이에요`, `야`) — caller is responsible for attaching to noun if needed for display
-- `case` field retained on future tense entries for structural consistency, though the conjugated form is identical regardless of case
+- `ida_form` restructured from stem-keyed format to conjugation-keyed format to match reverse lookup — no conversion function needed at merge time
+- `case` used instead of `irregular_type` in all 이다 entries
+- Drill input prompts are dynamic: if user enters `"이"` as stem, `case` is asked; otherwise `irregular_type` is asked
 
 ---
 
-## Next: Reverse Lookup & Drill Interface
+## Completed: drill.py
 
-**Reverse lookup approach:**
+**Reverse lookup population:**
 
-1. User inputs a word in dictionary form (e.g. `춥다`)
-2. System calls `get_stem`, detects irregular type, then generates all conjugated forms using conjugation functions
-3. Each form is stored in a lookup dictionary: `conjugated_form → list of (dictionary_form, rule_label)` tuples
-4. `ida_forms` is queried separately during lookup and merged at drill time
+- 12 conjugation combinations defined as `(honorific_type, tense, contracted)` tuples, paired with a parallel list of conjugation functions
+- Loop iterates over all stems, calls `detect_irregulars`, then generates all 12 forms using the combination/function lists
+- `dict.setdefault(conjugation, []).append(entry)` used for safe insertion — appends to existing list rather than overwriting, preserving ambiguous forms that map to multiple stems
+- `ida_form` merged into `conjugation_form` using the same `setdefault` pattern
+- Final `conjugation_form` dictionary saved to `conjugation_form.pkl` via `pickle`
 
-**Drill interface (terminal prototype):**
+**Reverse lookup format:**
 
-- Display a conjugated form to the user
-- User inputs the dictionary form and identifies the grammar rules applied (honorific type, tense, case if 이다)
-- System checks answer against lookup dictionary
-- Terminal first, then Flask/FastAPI web UI over local WiFi
+```python
+"들어": [
+    {"stem": "듣", "honorific_type": "haeche", "tense": "present", "contracted": None, "irregular_type": "ㄷ"},
+    {"stem": "들", "honorific_type": "haeche", "tense": "present", "contracted": None, "irregular_type": None},
+]
+```
 
-**Pending:**
+**Drill loop:**
 
-- Reverse lookup data structure and population logic
-- Drill algorithm (word selection, answer checking, scoring)
-- Terminal UI
+- Loads `conjugation_form.pkl` once before the loop
+- Works from a live copy of the dictionary — chosen forms are removed after selection; when a key's list is empty the key is removed; loop terminates when dictionary is empty (all forms exhausted)
+- Each round: `random.choice(list(conjugation_form))` selects a conjugated form; `random.choice(entries)` selects one target answer from potentially multiple stems
+- Input fields collected: stem, honorific type, tense, contracted (Yes/No/None), and either `case` (if stem input is `"이"`) or `irregular_type` (otherwise)
+- All inputs validated with while loops before proceeding
+- Checking logic handles four stem combinations: (user=이, correct=이), (user≠이, correct≠이), (user=이, correct≠이), (user≠이, correct=이)
+- Contracted checking handles all combinations of `True`, `False`, and `None` correctly
+- Score tracked as `total_correct / total_words_completed`; displayed on session end or when all forms exhausted
+
+**Key design decisions:**
+
+- Ambiguous forms (same conjugation from different stems) are preserved in the lookup and shown to the user with a count of possible answers
+- Input prompts are driven by `stem_input`; checking logic is driven by `form_data_chosen.get("stem")` — kept separate to handle mismatches correctly
+- `irregular_input` string `"None"` converted to Python `None` before comparison
+
+---
+
+## Pending
+
 - Anki deck import
-- Flask/FastAPI web app
+- Flask/FastAPI web app (accessible from phone over local WiFi)

@@ -91,32 +91,18 @@ ida_form = {
             "stem": "이",
             "honorific_type": "haeche",
             "tense": "future",
-            "case": "consonant",
+            "case": "both",
             "contracted": False,
-        },
-        {
-            "stem": "이",
-            "honorific_type": "haeche",
-            "tense": "future",
-            "case": "vowel",
-            "contracted": False,
-        },
+        }
     ],
     "일 거야": [
         {
             "stem": "이",
             "honorific_type": "haeche",
             "tense": "future",
-            "case": "consonant",
+            "case": "both",
             "contracted": True,
-        },
-        {
-            "stem": "이",
-            "honorific_type": "haeche",
-            "tense": "future",
-            "case": "vowel",
-            "contracted": True,
-        },
+        }
     ],
     "이에요": [
         {
@@ -159,48 +145,27 @@ ida_form = {
             "stem": "이",
             "honorific_type": "haeyoche",
             "tense": "future",
-            "case": "consonant",
+            "case": "both",
             "contracted": False,
-        },
-        {
-            "stem": "이",
-            "honorific_type": "haeyoche",
-            "tense": "future",
-            "case": "vowel",
-            "contracted": False,
-        },
+        }
     ],
     "일 거예요": [
         {
             "stem": "이",
             "honorific_type": "haeyoche",
             "tense": "future",
-            "case": "consonant",
+            "case": "both",
             "contracted": True,
-        },
-        {
-            "stem": "이",
-            "honorific_type": "haeyoche",
-            "tense": "future",
-            "case": "vowel",
-            "contracted": True,
-        },
+        }
     ],
     "입니다": [
         {
             "stem": "이",
             "honorific_type": "habsyoche",
             "tense": "present",
-            "case": "consonant",
+            "case": "both",
             "contracted": None,
-        },
-        {
-            "stem": "이",
-            "honorific_type": "habsyoche",
-            "tense": "present",
-            "case": "vowel",
-            "contracted": None,
-        },
+        }
     ],
     "이었습니다": [
         {
@@ -225,32 +190,18 @@ ida_form = {
             "stem": "이",
             "honorific_type": "habsyoche",
             "tense": "future",
-            "case": "consonant",
+            "case": "both",
             "contracted": False,
-        },
-        {
-            "stem": "이",
-            "honorific_type": "habsyoche",
-            "tense": "future",
-            "case": "vowel",
-            "contracted": False,
-        },
+        }
     ],
     "일 겁니다": [
         {
             "stem": "이",
             "honorific_type": "habsyoche",
             "tense": "future",
-            "case": "consonant",
+            "case": "both",
             "contracted": True,
-        },
-        {
-            "stem": "이",
-            "honorific_type": "habsyoche",
-            "tense": "future",
-            "case": "vowel",
-            "contracted": True,
-        },
+        }
     ],
 }
 combinations = [
